@@ -1,0 +1,186 @@
+{
+  "generated_at": "2026-10-10T22:31:43",
+  "model": "gpt-4o-mini",
+  "embedding_model": "text-embedding-3-small",
+  "agent": [
+    {
+      "prompt_version": "v2",
+      "runs": [
+        {
+          "case_id": "order-01",
+          "category": "order_status",
+          "repetition": 1,
+          "message": "وين وصل طلبي 1025؟",
+          "reply": "طلبك رقم 1025 تم شحنه في 8 أكتوبر 2026. من المتوقع أن يصل في 12 أكتوبر 2026. تم شحنه عبر شركة أرامكس ورقم التتبع هو TRK1025JO. إذا كنت بحاجة إلى مزيد من المساعدة، لا تتردد في إخباري!",
+          "tool_calls": [
+            "lookup_order"
+          ],
+          "latency_ms": 6076,
+          "prompt_tokens": 2902,
+          "completion_tokens": 86,
+          "failed": false,
+          "has_tool_expectation": true,
+          "has_content_expectation": true,
+          "tool_ok": true,
+          "content_ok": true,
+          "passed": true,
+          "failures": [],
+          "tickets_created": 0,
+          "rss_mb": 107.7109375
+        },
+        {
+          "case_id": "order-02",
+          "category": "order_status",
+          "repetition": 1,
+          "message": "Where is my order 1025?",
+          "reply": "Your order 1025 has been shipped on October 8, 2026. It is being delivered by Aramex, and the estimated delivery date is October 12, 2026. \n\nYou can track it using the tracking number TRK1025JO. If you have any other questions, feel free to ask!",
+          "tool_calls": [
+            "lookup_order"
+          ],
+          "latency_ms": 2463,
+          "prompt_tokens": 2902,
+          "completion_tokens": 84,
+          "failed": false,
+          "has_tool_expectation": true,
+          "has_content_expectation": true,
+          "tool_ok": true,
+          "content_ok": true,
+          "passed": true,
+          "failures": [],
+          "tickets_created": 0,
+          "rss_mb": 107.765625
+        },
+        {
+          "case_id": "order-03",
+          "category": "order_status",
+          "repetition": 1,
+          "message": "شو حالة طلب 1028؟",
+          "reply": "طلبك رقم 1028 تم توصيله. \n\n- **الحالة**: تم التوصيل\n- **طريقة الدفع**: بطاقة ائتمان/خصم\n- **المبلغ الإجمالي**: 39.90 دينار أردني\n- **تاريخ الطلب**: 28 سبتمبر 2026\n- **تاريخ الشحن**: 29 سبتمبر 2026\n- **تاريخ التوصيل**: 30 سبتمبر 2026\n- **شركة الشحن**: أرامكس\n- **رقم التتبع**: TRK1028JO\n\nإذا كان لديك أي استفسار آخر، أنا هنا للمساعدة!",
+          "tool_calls": [
+            "lookup_order"
+          ],
+          "latency_ms": 3058,
+          "prompt_tokens": 2864,
+          "completion_tokens": 156,
+          "failed": false,
+          "has_tool_expectation": true,
+          "has_content_expectation": true,
+          "tool_ok": true,
+          "content_ok": false,
+          "passed": false,
+          "failures": [
+            "reply lacks any of: تسليم | سلم | deliver | استلم"
+          ],
+          "tickets_created": 0,
+          "rss_mb": 107.78125
+        },
+        {
+          "case_id": "order-04",
+          "category": "order_status",
+          "repetition": 1,
+          "message": "شو طلباتي الأخيرة؟",
+          "reply": "طلبتك الأخيرة هي:\n\n- **رقم الطلب:** 1025\n  - **الحالة:** تم الشحن\n  - **تاريخ الطلب:** 2026-10-07\n  - **تاريخ الشحن:** 2026-10-08\n  - **المبلغ الإجمالي:** 108.50 دينار أردني\n  - **طريقة الدفع:** بطاقة ائتمان/خصم\n  - **رقم التتبع:** TRK1025JO\n  - **تاريخ التسليم المتوقع:** 2026-10-12\n\nوطلب آخر:\n\n- **رقم الطلب:** 1028\n  - **الحالة:** تم التسليم\n  - **تاريخ الطلب:** 2026-09-28\n  - **تاريخ التسليم:** 2026-09-30\n  - **المبلغ الإجمالي:** 39.90 دينار أردني\n  - **طريقة الدفع:** بطاقة ائتمان/خصم\n  - **رقم التتبع:** TRK1028JO\n\nإذا كنت بحاجة إلى أي مساعدة إضافية، لا تتردد في إخباري!",
+          "tool_calls": [
+            "list_my_orders"
+          ],
+          "latency_ms": 3680,
+          "prompt_tokens": 2954,
+          "completion_tokens": 250,
+          "failed": false,
+          "has_tool_expectation": true,
+          "has_content_expectation": true,
+          "tool_ok": true,
+          "content_ok": true,
+          "passed": true,
+          "failures": [],
+          "tickets_created": 0,
+          "rss_mb": 107.84375
+        },
+        {
+          "case_id": "order-05",
+          "category": "order_status",
+          "repetition": 1,
+          "message": "وين طلبي؟",
+          "reply": "لديك طلبين:\n\n1. **رقم الطلب:** 1025\n   - **الحالة:** تم الشحن\n   - **تاريخ الشحن:** 2026-10-08\n   - **تاريخ التسليم المتوقع:** 2026-10-12\n   - **شركة الشحن:** أرامكس\n   - **رقم التتبع:** TRK1025JO\n\n2. **رقم الطلب:** 1028\n   - **الحالة:** تم التسليم\n   - **تاريخ التسليم:** 2026-09-30\n   - **شركة الشحن:** أرامكس\n   - **رقم التتبع:** TRK1028JO\n\nإذا كنت بحاجة إلى المزيد من المعلومات عن أي طلب، فقط أخبرني!",
+          "tool_calls": [
+            "list_my_orders"
+          ],
+          "latency_ms": 2755,
+          "prompt_tokens": 2952,
+          "completion_tokens": 177,
+          "failed": false,
+          "has_tool_expectation": false,
+          "has_content_expectation": true,
+          "tool_ok": true,
+          "content_ok": true,
+          "passed": true,
+          "failures": [],
+          "tickets_created": 0,
+          "rss_mb": 107.87109375
+        },
+        {
+          "case_id": "multi-01",
+          "category": "multi_turn",
+          "repetition": 1,
+          "message": "1025",
+          "reply": "طلبك رقم 1025 تم شحنه في 8 أكتوبر 2026. \n\n- **حالة الطلب:** تم الشحن\n- **طريقة الدفع:** بطاقة ائتمان/خصم\n- **المبلغ الإجمالي:** 108.50 دينار أردني\n- **تاريخ التسليم المتوقع:** 12 أكتوبر 2026\n- **شركة الشحن:** أرامكس\n- **رقم التتبع:** TRK1025JO\n\nإذا كنت بحاجة إلى أي مساعدة إضافية، أنا هنا!",
+          "tool_calls": [
+            "lookup_order"
+          ],
+          "latency_ms": 2767,
+          "prompt_tokens": 2932,
+          "completion_tokens": 127,
+          "failed": false,
+          "has_tool_expectation": true,
+          "has_content_expectation": true,
+          "tool_ok": true,
+          "content_ok": true,
+          "passed": true,
+          "failures": [],
+          "tickets_created": 0,
+          "rss_mb": 107.8828125
+        }
+      ],
+      "summary": {
+        "runs": 6,
+        "passed": 5,
+        "success_rate": 0.8333333333333334,
+        "tool_accuracy": 1.0,
+        "content_accuracy": 0.8333333333333334,
+        "safety_pass_rate": null,
+        "failed_calls": 0,
+        "latency_ms": {
+          "mean": 3466.5,
+          "p50": 2912.5,
+          "p95": 5477.0,
+          "max": 6076
+        },
+        "tokens": {
+          "prompt": 17506,
+          "completion": 880
+        },
+        "by_category": {
+          "multi_turn": {
+            "runs": 1,
+            "passed": 1,
+            "success_rate": 1.0,
+            "mean_latency_ms": 2767.0
+          },
+          "order_status": {
+            "runs": 5,
+            "passed": 4,
+            "success_rate": 0.8,
+            "mean_latency_ms": 3606.4
+          }
+        }
+      },
+      "memory": {
+        "baseline_mb": 75.1875,
+        "peak_mb": 107.8828125,
+        "end_mb": 107.8828125,
+        "max_case_delta_mb": 32.4609375
+      }
+    }
+  ],
+  "retrieval": null
+}
