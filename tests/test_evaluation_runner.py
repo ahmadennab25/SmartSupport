@@ -8,12 +8,12 @@ from django.test import SimpleTestCase, TestCase
 from apps.agent import tools
 from apps.agent.agent import SupportAgent
 from apps.agent.prompts import build_system_prompt
+from apps.knowledge.services.ingestion_service import ingest_directory
+from apps.orders.models import Order
 from apps.tickets.models import Ticket
 from evaluation.cases import AGENT_CASES, AgentCase, RetrievalCase
 from evaluation.retrieval_eval import run_retrieval_evaluation
 from evaluation.runner import run_agent_evaluation
-from apps.orders.models import Order
-from apps.knowledge.services.ingestion_service import ingest_directory
 from tests.rag_helpers import FakeEmbeddingClient, fake_vector, write_docs
 from tests.test_agent import FakeClient, make_response, tool_call
 

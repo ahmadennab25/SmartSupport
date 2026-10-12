@@ -25,8 +25,8 @@ def _table(headers: list[str], rows: list[list]) -> str:
 def render_summary(payload: dict) -> str:
     out = ["# SmartSupport AI - evaluation summary", ""]
     out.append(
-        f"Generated: {payload.get('generated_at', '?')} | chat model: {payload.get('model', '?')} | "
-        f"embedding model: {payload.get('embedding_model', '?')}"
+        f"Generated: {payload.get('generated_at', '?')} | suite: {payload.get('suite', 'main')} | "
+        f"chat model: {payload.get('model', '?')} | embedding model: {payload.get('embedding_model', '?')}"
     )
     out.append("")
 

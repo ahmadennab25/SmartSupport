@@ -8,12 +8,20 @@ from django.test import SimpleTestCase, TestCase
 from apps.agent import tools
 from apps.agent.agent import SupportAgent
 from apps.customers.models import Customer
-from apps.knowledge.models import EMBEDDING_DIMENSIONS, KnowledgeChunk, KnowledgeDocument
+from apps.knowledge.models import (
+    EMBEDDING_DIMENSIONS,
+    KnowledgeChunk,
+    KnowledgeDocument,
+)
 from apps.knowledge.services import retrieval_service
-from apps.knowledge.services.chunking import build_chunk_text, chunk_markdown, parse_title
+from apps.knowledge.services.chunking import (
+    build_chunk_text,
+    chunk_markdown,
+    parse_title,
+)
 from apps.knowledge.services.embedding_service import EmbeddingError, embed_texts
 from apps.knowledge.services.ingestion_service import ingest_directory, parse_filename
-from tests.rag_helpers import SAMPLE_DOCS, FakeEmbeddingClient, fake_vector, write_docs
+from tests.rag_helpers import FakeEmbeddingClient, fake_vector, write_docs
 from tests.test_agent import FakeClient, make_response, tool_call
 
 EMBED_QUERY = "apps.knowledge.services.retrieval_service.embed_query"

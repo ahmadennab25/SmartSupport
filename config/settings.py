@@ -158,3 +158,6 @@ KNOWLEDGE_BASE_DIR = BASE_DIR / "knowledge_base"
 RAG_TOP_K = int(os.getenv("RAG_TOP_K", "4"))  # passages returned to the agent
 RAG_MIN_SCORE = float(os.getenv("RAG_MIN_SCORE", "0.2"))  # minimum cosine similarity (0-1)
 EMBEDDING_BATCH_SIZE = int(os.getenv("EMBEDDING_BATCH_SIZE", "64"))
+
+# --- Agent prompt (phase 8) ----------------------------------------------------
+AGENT_PROMPT_VERSION = os.getenv("AGENT_PROMPT_VERSION", "v3")  # v1, v2 or v3 (see apps/agent/prompts.py)

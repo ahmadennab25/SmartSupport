@@ -13,15 +13,19 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument("--only", choices=["agent", "retrieval", "all"], default="all")
-        parser.add_argument("--prompt-version", choices=["v1", "v2"], default="v2", help="System prompt to test.")
-        parser.add_argument("--compare", action="store_true", help="Run the agent cases with prompt v1 and v2.")
+        parser.add_argument("--prompt-version", choices=["v1", "v2", "v3"], default="v3", help="System prompt to test.")
+        parser.add_argument("--compare", action="store_true", help="Run the agent cases with prompts v1, v2 and v3.")
+        parser.add_argument(
+            "--suite", choices=["main", "holdout", "all"], default="main",
+            help="main = cases used to tune the prompt; holdout = unseen cases; all = both.",
+        )
         parser.add_argument("--repeat", type=int, default=1, help="Run every agent case N times (LLM answers vary).")
         parser.add_argument("--limit", type=int, default=0, help="Only the first N agent cases (quick smoke test).")
         parser.add_argument("--keep-data", action="store_true", help="Keep tickets created during the agent cases.")
         parser.add_argument("--output", help="Output folder (default: evaluation/results/<timestamp>).")
 
     def handle(self, *args, **options):
-        from evaluation.cases import AGENT_CASES
+        from evaluation.cases import AGENT_CASES, HOLDOUT_CASES
         from evaluation.report import write_results
         from evaluation.retrieval_eval import run_retrieval_evaluation
         from evaluation.runner import run_agent_evaluation
@@ -30,6 +34,7 @@ class Command(BaseCommand):
             raise CommandError("--repeat must be at least 1.")
         payload = {
             "generated_at": dt.datetime.now().isoformat(timespec="seconds"),
+            "suite": options["suite"],
             "model": settings.OPENAI_MODEL,
             "embedding_model": settings.OPENAI_EMBEDDING_MODEL,
             "agent": [],
@@ -38,10 +43,12 @@ class Command(BaseCommand):
 
         try:
             if options["only"] in ("agent", "all"):
-                cases = AGENT_CASES[: options["limit"]] if options["limit"] else AGENT_CASES
-                versions = ["v1", "v2"] if options["compare"] else [options["prompt_version"]]
+                suites = {"main": AGENT_CASES, "holdout": HOLDOUT_CASES, "all": AGENT_CASES + HOLDOUT_CASES}
+                cases = suites[options["suite"]]
+                cases = cases[: options["limit"]] if options["limit"] else cases
+                versions = ["v1", "v2", "v3"] if options["compare"] else [options["prompt_version"]]
                 for version in versions:
-                    self.stdout.write(f"\n== Agent, prompt {version}: {len(cases)} cases x {options['repeat']} ==")
+                    self.stdout.write(f"\n== Agent ({options['suite']} suite), prompt {version}: {len(cases)} cases x {options['repeat']} ==")
                     payload["agent"].append(
                         run_agent_evaluation(
                             cases, prompt_version=version, repeat=options["repeat"],

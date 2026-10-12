@@ -159,7 +159,7 @@ def patch_env() -> None:
     key = secrets.token_urlsafe(32)
     prefix = b"" if data.endswith(b"\n") or not data else b"\n"
     with path.open("ab") as handle:
-        handle.write(prefix + f"\n# Chat API (phase 3)\nCHAT_API_KEY='{key}'\n".encode("utf-8"))
+        handle.write(prefix + f"\n# Chat API (phase 3)\nCHAT_API_KEY='{key}'\n".encode())
     log("+ .env: generated a random CHAT_API_KEY (open .env to read it)")
 
 

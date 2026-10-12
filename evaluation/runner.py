@@ -1,6 +1,5 @@
 """Run the agent test cases against the real agent and collect accuracy, latency and memory."""
 import os
-import time
 
 import psutil
 from django.conf import settings
@@ -34,7 +33,7 @@ def run_agent_evaluation(cases=None, prompt_version=None, repeat=1, rollback=Tru
     """Run every case `repeat` times, each as a fresh conversation (history is only what the case defines).
     With rollback=True the database changes of each case (tickets, escalations) are undone."""
     cases = list(cases if cases is not None else AGENT_CASES)
-    version = prompt_version or getattr(settings, "AGENT_PROMPT_VERSION", "v2")
+    version = prompt_version or getattr(settings, "AGENT_PROMPT_VERSION", "v3")
     customer = get_eval_customer()
     process = psutil.Process(os.getpid())
     baseline = _mb(process.memory_info().rss)

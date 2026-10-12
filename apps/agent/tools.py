@@ -200,4 +200,4 @@ def execute_tool(name: str, raw_arguments: str | None, customer) -> dict:
         logger.exception("Tool %s failed", name)
         return {"error": "Internal error while running the tool."}
 
-from . import catalog_tools  # noqa: E402,F401  (registers the search_products tool)
+from . import catalog_tools  # noqa: F401  (registers the search_products tool)
