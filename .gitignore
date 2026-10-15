@@ -5,12 +5,12 @@
 # Python
 __pycache__/
 *.py[cod]
-*.pyc
 .venv/
 venv/
 env/
 *.egg-info/
 .pytest_cache/
+.ruff_cache/
 .coverage
 htmlcov/
 
@@ -28,8 +28,8 @@ media/
 .DS_Store
 Thumbs.db
 
-.env
-.venv/
-__pycache__/
-*.py[cod]
-db.sqlite3
+# Local scratch files
+failures*.txt
+*.old.md
+*.bak
+p*_temp/

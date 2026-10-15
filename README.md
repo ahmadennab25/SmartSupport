@@ -51,7 +51,7 @@ Staff manage customers, orders, tickets, chat logs and the knowledge base from a
 - **AI:** OpenAI API: `gpt-4o-mini` (agent, function calling) and `text-embedding-3-small` (RAG)
 - **RAG:** markdown chunking, cosine similarity with NumPy
 - **Messaging:** Twilio WhatsApp API (sandbox for testing), ngrok for local webhooks
-- **Other:** python-dotenv (configuration), psutil (memory measurement), Django's test framework (172 tests)
+- **Other:** python-dotenv (configuration), psutil (memory measurement), Django's test framework
 
 ## 4. Project Structure
 
@@ -67,7 +67,7 @@ smartsupport/
 │   ├── knowledge/           # RAG: models (document, chunk), services (chunking, embeddings, ingestion,
 │   │                        #   retrieval), command ingest_knowledge, the search_policies tool
 │   ├── agent/               # SupportAgent (tool-calling loop), tools.py (tool registry), catalog_tools.py,
-│   │                        #   prompts.py (system prompt v1/v2/v3), llm_client.py
+│   │                        #   prompts.py + prompt_templates/system_v1|v2|v3.md (system prompt), llm_client.py
 │   ├── chat/                # ChatMessage model (history, latency, tokens), chat_service.py,
 │   │                        #   views/chat_views.py -> POST /api/chat/
 │   └── whatsapp/            # services/twilio_service.py (signature check, TwiML), views/webhook_views.py
@@ -149,11 +149,18 @@ python manage.py runserver
     -d '{"phone": "+9627XXXXXXXX", "message": "Where is my order 1025?"}'
   ```
   Response: `reply`, `customer`, `tool_calls`, `latency_ms`, `failed`. From a terminal you can also run
-  `python scripts/ask.py "وين وصل طلبي 1025؟"`.
-- WhatsApp: run `ngrok http 8000`; in the Twilio console (Messaging, Try it out, WhatsApp sandbox) set
-  *When a message comes in* to `https://<your-ngrok-domain>/api/whatsapp/webhook/` (POST), join the sandbox from your
-  phone, and chat. Start with `TWILIO_VALIDATE_REQUESTS=False`; enable it (with `TWILIO_AUTH_TOKEN`) once it works,
-  and set `TWILIO_WEBHOOK_URL` to the exact public URL if the signature check fails behind ngrok.
+  `python scripts/ask.py "Where is my order 1025?" +9627XXXXXXXX` (without a phone number it uses the seed's default
+  demo customer, +962790000001).
+- WhatsApp (Twilio sandbox). **Set up signature validation first**: the customer is identified by the `From` field,
+  so without validation anyone who can reach the webhook could pretend to be any customer.
+  1. Copy *Account SID* and *Auth Token* from the Twilio console into `.env` (`TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`).
+  2. Keep `TWILIO_VALIDATE_REQUESTS=True` (the default; always on when `DEBUG=False`) and make sure `ALLOWED_HOSTS`
+     contains your ngrok domain (`.ngrok-free.dev` covers its subdomains).
+  3. Run `ngrok http 8000`. In the Twilio console (Messaging, Try it out, WhatsApp sandbox) set *When a message comes in*
+     to `https://<your-ngrok-domain>/api/whatsapp/webhook/` (POST), and join the sandbox from your phone.
+  4. Chat. A request without a valid Twilio signature gets `403`. If your real messages get `403` behind ngrok, set
+     `TWILIO_WEBHOOK_URL` to the exact public URL from step 3.
+  Turn validation off (`TWILIO_VALIDATE_REQUESTS=False`) only for local experiments with `DEBUG=True`.
 
 **Tests** (OpenAI and Twilio are mocked, no key needed): `python manage.py test tests`
 
@@ -173,7 +180,7 @@ Copy `.env.example` to `.env`. **Never commit `.env`.** Only the first five grou
 |---|---|
 | `SECRET_KEY` | Django secret key (required when `DEBUG=False`) |
 | `DEBUG` | `True` for development only |
-| `ALLOWED_HOSTS` | Comma-separated hosts (`*` is fine locally, never in production) |
+| `ALLOWED_HOSTS` | Comma-separated hosts: `localhost,127.0.0.1` plus your ngrok domain (`.ngrok-free.dev` matches its subdomains). Never `*` in production |
 | `DATABASE_HOST`, `DATABASE_PORT`, `DATABASE_USER`, `DATABASE_PASSWORD`, `DATABASE_NAME` | PostgreSQL connection |
 | `DATABASE_SCHEMA` | Schema used by the project (default `public`) |
 | `OPENAI_API_KEY` | OpenAI key for the agent and the embeddings |
@@ -182,7 +189,7 @@ Copy `.env.example` to `.env`. **Never commit `.env`.** Only the first five grou
 | `CHAT_API_KEY` | Secret expected in the `X-API-Key` header of `POST /api/chat/` (the endpoint refuses everything if unset) |
 | `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN` | Twilio credentials (WhatsApp demo only) |
 | `TWILIO_WHATSAPP_FROM` | Twilio WhatsApp sender, e.g. `whatsapp:+14155238886` (copy it from your console) |
-| `TWILIO_VALIDATE_REQUESTS` | Verify `X-Twilio-Signature` on the webhook (enable once it works; fails closed without a token) |
+| `TWILIO_VALIDATE_REQUESTS` | Verify `X-Twilio-Signature` on the webhook. Default `True`; always on when `DEBUG=False`; fails closed without `TWILIO_AUTH_TOKEN` |
 | `TWILIO_WEBHOOK_URL` | Optional exact public webhook URL used for signature validation (ngrok) |
 | `AGENT_PROMPT_VERSION` | System prompt version `v1`, `v2` or `v3` (default `v3`) |
 | `AGENT_HISTORY_LIMIT`, `AGENT_MAX_TOOL_ROUNDS`, `CHAT_MAX_MESSAGE_CHARS`, `STORE_NAME` | Conversation memory (10), tool rounds (5), max message length (1500), store name in the prompt |
@@ -226,7 +233,16 @@ Full details, tables and analysis are in the performance report. Numbers below c
 | Performance evaluation: accuracy, latency, memory | `evaluation/`, performance report |
 | README, `.env.example`, `.gitignore`, tests | this file, repository root, `tests/` |
 
-## 9. Known Limitations and Future Work
+## 9. Security Notes
+
+- **Identity** comes from the WhatsApp phone number. The webhook therefore checks Twilio's signature (on by default), and
+  `POST /api/chat/` requires the `X-API-Key` header (it refuses everything when no key is configured).
+- **The agent can only reach the current customer's data:** tools receive the customer from the server, never from the
+  model, and every query filters by that customer. Unit tests and the evaluation (ownership and prompt-injection cases) check this.
+- The agent cannot cancel orders or refund money. Secrets live in `.env`, which is git-ignored.
+- Open items: rate limiting per sender (any new phone number creates a customer record), see the next section.
+
+## 10. Known Limitations and Future Work
 
 - No rate limiting, and Twilio retries are not de-duplicated; text messages only (images and voice notes get a polite notice).
 - Similarity search runs in NumPy: fine for hundreds or thousands of chunks; for much larger knowledge bases move the
