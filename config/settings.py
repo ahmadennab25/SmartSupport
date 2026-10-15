@@ -134,7 +134,15 @@ OPENAI_DEFAULT_ERROR_MESSAGE = os.getenv(
 TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID", "")
 TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN", "")
 TWILIO_WHATSAPP_FROM = os.getenv("TWILIO_WHATSAPP_FROM", "")
-TWILIO_VALIDATE_REQUESTS = env_bool("TWILIO_VALIDATE_REQUESTS", False)
+def twilio_validation_enabled(debug: bool, raw: str | None) -> bool:
+    """Webhook signatures are always checked when DEBUG is off. In development they are checked unless the
+    developer explicitly sets TWILIO_VALIDATE_REQUESTS=False."""
+    if not debug:
+        return True
+    return True if raw is None else raw.strip().lower() in {"1", "true", "yes", "on"}
+
+
+TWILIO_VALIDATE_REQUESTS = twilio_validation_enabled(DEBUG, os.getenv("TWILIO_VALIDATE_REQUESTS"))
 
 LOGGING = {
     "version": 1,
