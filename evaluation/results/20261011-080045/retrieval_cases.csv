@@ -1,0 +1,35 @@
+﻿scope,language,query,expected,rank,top_slug,top_score,latency_ms
+in,en,How many days do I have to return a product?,returns-policy,1,returns-policy,0.6423,304.6
+in,en,Can I return opened earbuds?,returns-policy,1,returns-policy,0.6027,278.2
+in,en,Who pays for return shipping?,returns-policy,1,returns-policy,0.5064,346.3
+in,en,When will I get my money back?,refunds-policy,1,refunds-policy,0.4404,318.6
+in,en,Will the refund go to my card or my wallet?,refunds-policy,1,refunds-policy,0.603,308.3
+in,en,How much is delivery to Aqaba?,shipping-and-delivery,1,shipping-and-delivery,0.6221,292.2
+in,en,Is shipping free?,shipping-and-delivery,1,shipping-and-delivery,0.5236,319.1
+in,en,What if my order is late?,shipping-and-delivery,1,shipping-and-delivery,0.549,363.3
+in,en,Can I pay when the courier arrives?,payment-methods,1,payment-methods,0.4903,285.1
+in,en,My card payment failed,payment-methods,1,payment-methods,0.7068,266.9
+in,en,I was charged twice,payment-methods,1,payment-methods,0.6901,293.9
+in,en,Which cards do you accept?,payment-methods,1,payment-methods,0.4722,397.9
+in,en,How can I cancel my order?,faq,1,faq,0.6325,273.8
+in,en,Is there a warranty on electronics?,faq,1,faq,0.721,283.6
+in,en,What are your support working hours?,faq,1,faq,0.5067,303.3
+in,en,Can I talk to a real person?,faq,1,faq,0.5282,279.6
+in,ar,كم يوم عندي لارجاع المنتج؟,returns-policy,1,returns-policy,0.4297,295.2
+in,ar,هل بقدر ارجع السماعات بعد ما افتحها؟,returns-policy,1,returns-policy,0.3848,474.2
+in,ar,مين بدفع شحن الارجاع؟,returns-policy,1,returns-policy,0.6317,865.4
+in,ar,امتى بترجعوا لي الفلوس؟,refunds-policy,,faq,0.1932,299.3
+in,ar,كم بياخد التوصيل لاربد؟,shipping-and-delivery,1,shipping-and-delivery,0.3885,304.0
+in,ar,الشحن مجاني ولا لا؟,shipping-and-delivery,1,shipping-and-delivery,0.5927,289.9
+in,ar,الدفع عند الاستلام متاح؟,payment-methods,1,payment-methods,0.7466,269.2
+in,ar,انخصم مني المبلغ مرتين,payment-methods,1,payment-methods,0.4775,362.2
+in,ar,بدي الغي الطلب,faq,1,faq,0.3176,307.3
+in,ar,في كفالة على الاجهزة؟,faq,1,faq,0.3135,293.4
+in,ar,متى بتشتغلوا؟,faq,4,shipping-and-delivery,0.2451,328.5
+out,en,What is the weather in Amman today?,,,shipping-and-delivery,0.4012,339.5
+out,en,Who won the football world cup?,,,payment-methods,0.0615,275.5
+out,en,How do I learn Python programming?,,,faq,0.1036,300.7
+out,en,What is the price of the latest iPhone?,,,returns-policy,0.195,277.9
+out,ar,كيف بطبخ المنسف؟,,,returns-policy,0.1835,333.7
+out,ar,اعطيني وصفة كيك الشوكولاتة,,,faq,0.2339,332.1
+out,ar,كم سعر الذهب اليوم؟,,,faq,0.1967,310.0
