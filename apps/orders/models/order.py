@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from django.db import models
+from django.db import IntegrityError, models, transaction
 from django.db.models import DecimalField, ExpressionWrapper, F, Max, Sum
 from django.utils import timezone
 
@@ -61,11 +61,27 @@ class Order(TimeStampedModel):
     def __str__(self) -> str:
         return f"Order #{self.order_number}"
 
+    NUMBER_RETRIES = 5
+
+    @staticmethod
+    def _next_order_number() -> int:
+        last = Order.objects.aggregate(last=Max("order_number"))["last"]
+        return (last or 1000) + 1
+
     def save(self, *args, **kwargs):
-        if self.order_number is None:
-            last = Order.objects.aggregate(last=Max("order_number"))["last"]
-            self.order_number = (last or 1000) + 1
-        super().save(*args, **kwargs)
+        """A new order gets the next free number. If two orders are saved at the same moment and pick the same
+        number, the unique constraint rejects the second insert and it is retried with a fresh number."""
+        if self.order_number is not None:
+            return super().save(*args, **kwargs)
+        for attempt in range(1, self.NUMBER_RETRIES + 1):
+            self.order_number = self._next_order_number()
+            try:
+                with transaction.atomic():
+                    return super().save(*args, **kwargs)
+            except IntegrityError as exc:
+                if "order_number" not in str(exc) or attempt == self.NUMBER_RETRIES:
+                    raise
+                self.order_number = None
 
     @property
     def is_cancellable(self) -> bool:
