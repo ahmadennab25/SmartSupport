@@ -1,3 +1,8 @@
+"""Send one message to the local /api/chat/ endpoint and print the answer.
+
+Usage:  python scripts/ask.py "your message" [phone] [url]
+Without a phone it uses +962790000001, the default demo customer of `seed_demo_data`.
+"""
 import json
 import sys
 import urllib.error
